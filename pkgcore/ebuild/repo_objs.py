@@ -335,7 +335,7 @@ class RepoConfig(syncable.tree):
     layout_offset = "metadata/layout.conf"
 
     default_hashes = ('size', 'sha256', 'sha512', 'whirlpool')
-    supported_profile_formats = ('pms', 'portage-1', 'portage-2')
+    supported_profile_formats = ('pms', 'portage-1', 'portage-2', 'profile-bashrcs')
     supported_cache_formats = ('pms', 'md5-dict')
 
     klass.inject_immutable_instance(locals())
