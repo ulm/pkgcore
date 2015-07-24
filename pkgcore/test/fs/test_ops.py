@@ -204,9 +204,8 @@ class Test_merge_contents(ContentsMixin):
         path = pjoin(self.dir, "sym")
         fp = pjoin(self.dir, "trg")
         os.mkdir(path)
-        # test sym over a directory.
-        f = fs.fsSymlink(path, fp, mode=0644, mtime=0, uid=os.getuid(),
-            gid=os.getgid())
+        f = fs.fsSymlink(
+            path, fp, mode=0644, mtime=0, uid=os.getuid(), gid=os.getgid())
         cset = contents.contentsSet([f])
         self.assertRaises(ops.FailedCopy, ops.merge_contents, cset)
         self.assertTrue(fs.isdir(livefs.gen_obj(path)))
