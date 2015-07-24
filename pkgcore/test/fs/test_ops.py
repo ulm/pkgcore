@@ -212,6 +212,30 @@ class Test_merge_contents(ContentsMixin):
         os.mkdir(fp)
         ops.merge_contents(cset)
 
+    def test_dir_over_sym(self):
+        # dirs can be merged over symlinks to dirs
+        dir_path = pjoin(self.dir, "dir")
+        path = pjoin(self.dir, "sym")
+        os.mkdir(dir_path)
+        os.symlink(dir_path, path)
+        d = fs.fsDir(path, mode=0755, mtime=0, uid=os.getuid(), gid=os.getgid())
+        cset = contents.contentsSet([d])
+        self.assertTrue(ops.merge_contents(cset))
+        self.assertTrue(fs.isdir(livefs.gen_obj(path)))
+
+    def test_empty_dir(self):
+        # according to the spec, empty dirs should be ignored
+        src = self.gen_dir("src")
+        dest = self.gen_dir("dest")
+        path = pjoin(src, "dir")
+        os.mkdir(path)
+        d = fs.fsDir(
+            pjoin(os.path.sep, os.path.basename(path)), mode=0755, mtime=0,
+            uid=os.getuid(), gid=os.getgid())
+        cset = contents.contentsSet([d])
+        self.assertTrue(ops.merge_contents(cset, offset=dest))
+        self.assertNotEqual(cset, livefs.scan(dest, offset=dest))
+
     def test_dir_over_file(self):
         # according to the spec, dirs can't be merged over files that
         # aren't dirs or symlinks to dirs
