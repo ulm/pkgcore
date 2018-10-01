@@ -3,12 +3,20 @@ addons:
   apt:
     packages:
     - install-info
+    - libcurl4-openssl-dev
+    - libelf-dev
+    - libdw-dev
+    - binutils-dev
+    - libiberty-dev
+    - g++
 cache:
   pip: true
   directories:
   - $HOME/downloads
+  - $HOME/kcov
 install:
 - pip install -U pip
+- ci/install_kcov.sh
 before_script:
 - git clone https://github.com/pkgcore/pkgdist.git
 - cp -R pkgdist/requirements/* requirements/
